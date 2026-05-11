@@ -45,6 +45,7 @@ export type Settings = {
 
 export type AppState = {
 	todos: Todo[];
+	archivedTodos: Todo[];
 	categories: Category[];
 	sidebar: SidebarConfig;
 	settings: Settings;
