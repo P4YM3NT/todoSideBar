@@ -1,6 +1,5 @@
-import { app, globalShortcut, Tray, Menu, nativeImage } from 'electron';
+import { app, globalShortcut, Tray, Menu, nativeImage, BrowserWindow } from 'electron';
 import { join } from 'path';
-import { optimizer } from '@electron-toolkit/utils';
 import './logger';
 import log from './logger';
 import { createWindow } from './window';
@@ -16,7 +15,14 @@ app.whenReady().then(() => {
 
 	registerIpcHandlers(win);
 
-	optimizer.watchWindowShortcuts(win);
+	// Open DevTools on F12 in development
+	if (!app.isPackaged) {
+		app.on('browser-window-created', (_, window: BrowserWindow) => {
+			window.webContents.on('before-input-event', (_, input) => {
+				if (input.key === 'F12') window.webContents.openDevTools();
+			});
+		});
+	}
 
 	const shortcut = store.get('settings.globalShortcut') as string;
 	globalShortcut.register(shortcut, () => {
