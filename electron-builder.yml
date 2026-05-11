@@ -11,9 +11,16 @@ files:
 
 mac:
   category: public.app-category.productivity
+  identity: null
   target:
     - target: dmg
-      arch: [x64, arm64]
+
+extraResources:
+  - from: resources/
+    to: resources/
+    filter:
+      - "**/*"
+      - "!.gitkeep"
 
 win:
   target:

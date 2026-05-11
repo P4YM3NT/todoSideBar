@@ -17,7 +17,8 @@
 		"test:component": "vitest run --passWithNoTests tests/component",
 		"test:e2e": "playwright test --pass-with-no-tests tests/e2e",
 		"test:all": "pnpm test:unit && pnpm test:component && pnpm test:e2e",
-		"test:watch": "vitest watch"
+		"test:watch": "vitest watch",
+		"gen:tray-icon": "node scripts/gen-tray-icon.js"
 	},
 	"dependencies": {
 		"@electron-toolkit/preload": "^3.0.0",

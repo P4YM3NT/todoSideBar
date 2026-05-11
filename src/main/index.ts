@@ -33,8 +33,11 @@ app.whenReady().then(() => {
 		log.debug('Global shortcut triggered, isOpen:', isOpen, 'position:', position);
 	});
 
-	const iconPath = join(__dirname, '../../resources/tray-icon.png');
+	const iconPath = app.isPackaged
+		? join(process.resourcesPath, 'resources', 'tray-icon.png')
+		: join(__dirname, '../../resources/tray-icon.png');
 	const icon = nativeImage.createFromPath(iconPath);
+	icon.setTemplateImage(true);
 	tray = new Tray(icon.isEmpty() ? nativeImage.createEmpty() : icon);
 
 	const contextMenu = Menu.buildFromTemplate([
