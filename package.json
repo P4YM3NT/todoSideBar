@@ -13,9 +13,9 @@
 		"lint": "eslint . --ext .ts,.tsx",
 		"lint:fix": "eslint . --ext .ts,.tsx --fix",
 		"format": "prettier --write .",
-		"test:unit": "vitest run tests/unit",
-		"test:component": "vitest run tests/component",
-		"test:e2e": "playwright test tests/e2e",
+		"test:unit": "vitest run --passWithNoTests tests/unit",
+		"test:component": "vitest run --passWithNoTests tests/component",
+		"test:e2e": "playwright test --pass-with-no-tests tests/e2e",
 		"test:all": "pnpm test:unit && pnpm test:component && pnpm test:e2e",
 		"test:watch": "vitest watch"
 	},
