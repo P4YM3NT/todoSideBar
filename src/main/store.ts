@@ -3,6 +3,7 @@ import type { AppState } from '../shared/ipc-types';
 
 const defaults: AppState = {
 	todos: [],
+	archivedTodos: [],
 	categories: [],
 	sidebar: {
 		position: 'right',
