@@ -1,40 +1,42 @@
-import { useEffect, useState } from 'react';
-
-type Theme = 'light' | 'dark';
+import { useEffect } from 'react';
+import { Sidebar } from './components/layout/Sidebar';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
+import { useSidebarStore } from './store/sidebar';
+import { useSettingsStore } from './store/settings';
+import { invoke } from './store/ipc';
 
 function App(): JSX.Element {
-	const [theme, setTheme] = useState<Theme>('light');
+	const { hydrate: hydrateSidebar, setOpen } = useSidebarStore();
+	const { setResolvedTheme } = useSettingsStore();
 
 	useEffect(() => {
-		window.api.invoke('app:getTheme').then((res) => {
-			const r = res as { success: boolean; data: Theme };
-			if (r.success) applyTheme(r.data);
+		hydrateSidebar();
+
+		invoke('app:getTheme').then((theme) => setResolvedTheme(theme));
+
+		const unsubTheme = window.api.on('app:onThemeChange', (data) => {
+			setResolvedTheme(data as 'light' | 'dark');
 		});
 
-		const unsubscribe = window.api.on('app:onThemeChange', (data) => {
-			applyTheme(data as Theme);
+		const unsubToggle = window.api.on('sidebar:toggleFromMain', (data) => {
+			setOpen(data as boolean);
 		});
 
-		return unsubscribe;
+		return () => {
+			unsubTheme();
+			unsubToggle();
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	function applyTheme(t: Theme): void {
-		setTheme(t);
-		document.documentElement.classList.toggle('dark', t === 'dark');
-	}
-
 	return (
-		<div
-			className={`h-screen flex flex-col font-sans text-sm ${
-				theme === 'dark'
-					? 'bg-[#141414] text-[#F0F0F0]'
-					: 'bg-[#FFFFFF] text-[#1A1A1A]'
-			}`}
-		>
-			<div className="flex items-center justify-center h-full">
-				<p className="text-[#8A8A8A] text-xs">Todo Sidebar lädt…</p>
-			</div>
-		</div>
+		<ErrorBoundary>
+			<Sidebar>
+				<div className="p-4 flex flex-col gap-2">
+					<p className="text-xs text-[#8A8A8A]">Todos kommen hier…</p>
+				</div>
+			</Sidebar>
+		</ErrorBoundary>
 	);
 }
 
