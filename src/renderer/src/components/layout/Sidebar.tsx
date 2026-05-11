@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { CollapsePill } from './CollapsePill';
 import { DragHandle } from './DragHandle';
+import { ResizeHandle } from './ResizeHandle';
 import { useSidebarStore } from '../../store/sidebar';
 import { cn } from '../../lib/cn';
 
@@ -14,6 +15,8 @@ export function Sidebar({ children }: Props): JSX.Element {
 	return (
 		<div className="h-screen overflow-hidden relative bg-white dark:bg-[#141414] text-[#1A1A1A] dark:text-[#F0F0F0] font-sans text-sm">
 			<CollapsePill />
+
+			{isOpen && <ResizeHandle />}
 
 			{isOpen && (
 				<div
